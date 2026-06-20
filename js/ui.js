@@ -136,10 +136,27 @@ F  -> ( E ) | id`;
       else if (i + 1 === stepNum) pill.classList.add("active");
     });
 
-    // Scroll the matching step panel into view smoothly
-    const panel = document.getElementById(`step-panel-${stepNum}`);
-    if (panel) panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    // Show only the active panel, hide the rest
+    [1,2,3,4,5].forEach(n => {
+      const panel = document.getElementById(`step-panel-${n}`);
+      if (panel) panel.style.display = (n === stepNum) ? "flex" : "none";
+    });
+
+    // Scroll content area to top
+    const mainWs = document.querySelector(".main-workspace");
+    if (mainWs) mainWs.scrollTop = 0;
   }
+
+  // Make step pills clickable for navigation
+  pills.forEach((pill, i) => {
+    pill.addEventListener("click", () => {
+      const stepNum = i + 1;
+      // Only allow navigating to steps that have been reached (done or active)
+      if (pill.classList.contains("done") || pill.classList.contains("active")) {
+        activateStep(stepNum);
+      }
+    });
+  });
 
   // ══════════════════════════════════════
   //  STEP 1 + 2 + 3: Parse Grammar & Build Tables

@@ -12,57 +12,74 @@
   <!-- App Header -->
   <header>
     <div class="header-title-container">
-      <span class="header-badge">Option A: Parsing Phase</span>
-      <h1>LL(1) Compiler Parser Visualizer</h1>
-    </div>
-    <!-- 5-Step Progress Bar -->
-    <div class="steps-bar">
-      <div class="step-pill active" id="pill-1"><span class="step-num">1</span> Left Recursion</div>
-      <div class="step-arrow">›</div>
-      <div class="step-pill" id="pill-2"><span class="step-num">2</span> FIRST & FOLLOW</div>
-      <div class="step-arrow">›</div>
-      <div class="step-pill" id="pill-3"><span class="step-num">3</span> Parse Table</div>
-      <div class="step-arrow">›</div>
-      <div class="step-pill" id="pill-4"><span class="step-num">4</span> Stack</div>
-      <div class="step-arrow">›</div>
-      <div class="step-pill" id="pill-5"><span class="step-num">5</span> Parse Tree</div>
+      <div class="logo-mark">LL1</div>
+      <div>
+        <div class="header-subtitle">Option A · Parsing Phase</div>
+        <h1>Compiler Parser Visualizer</h1>
+      </div>
     </div>
   </header>
 
   <!-- Workspace Grid -->
   <main class="workspace">
 
-    <!-- ===== LEFT SIDEBAR: Grammar Input ===== -->
-    <section class="panel sidebar-panel">
-      <div class="panel-title">
-        <span><i class="fa-solid fa-gears"></i> Grammar Config</span>
-      </div>
+    <!-- ===== LEFT SIDEBAR ===== -->
+    <aside class="sidebar-panel">
 
       <!-- CFG Rules Editor -->
-      <div class="form-group">
-        <label for="grammar-input">Context-Free Grammar (CFG) Rules</label>
-        <textarea id="grammar-input" spellcheck="false" placeholder="E -> T E'&#10;E' -> + T E' | e&#10;T -> F T'&#10;T' -> * F T' | e&#10;F -> ( E ) | id"></textarea>
-      </div>
-
-      <!-- Buttons -->
-      <div class="btn-group">
-        <button id="btn-parse-grammar" class="btn btn-primary">
-          <i class="fa-solid fa-play"></i> Run All Steps
-        </button>
-        <div class="file-upload-wrapper">
-          <button class="btn btn-secondary"><i class="fa-solid fa-file-import"></i> Load File</button>
-          <input type="file" id="file-grammar-upload" accept=".txt">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title"><i class="fa-solid fa-gears"></i> Grammar Input</div>
+        <div class="form-group">
+          <label for="grammar-input">CFG Rules</label>
+          <textarea id="grammar-input" spellcheck="false" placeholder="E -> T E'&#10;E' -> + T E' | e&#10;T -> F T'&#10;T' -> * F T' | e&#10;F -> ( E ) | id"></textarea>
         </div>
-        <button id="btn-grammar-download" class="btn btn-secondary">
-          <i class="fa-solid fa-file-arrow-down"></i> Save
-        </button>
+        <div class="btn-group">
+          <button id="btn-parse-grammar" class="btn btn-primary">
+            <i class="fa-solid fa-play"></i> Run All Steps
+          </button>
+          <div class="file-upload-wrapper">
+            <button class="btn btn-secondary"><i class="fa-solid fa-file-import"></i> Load</button>
+            <input type="file" id="file-grammar-upload" accept=".txt">
+          </div>
+          <button id="btn-grammar-download" class="btn btn-secondary">
+            <i class="fa-solid fa-file-arrow-down"></i> Save
+          </button>
+        </div>
       </div>
-    </section>
 
-    <!-- ===== RIGHT: 5-Step Panels ===== -->
+      <!-- ── Step Navigation (horizontal pills) ── -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title"><i class="fa-solid fa-list-ol"></i> Steps</div>
+        <div class="steps-bar">
+          <button class="step-pill active" id="pill-1" data-step="1">
+            <span class="step-num">1</span>
+            <span class="step-label">Left Recursion</span>
+          </button>
+          <button class="step-pill" id="pill-2" data-step="2">
+            <span class="step-num">2</span>
+            <span class="step-label">FIRST & FOLLOW</span>
+          </button>
+          <button class="step-pill" id="pill-3" data-step="3">
+            <span class="step-num">3</span>
+            <span class="step-label">Parse Table</span>
+          </button>
+          <button class="step-pill" id="pill-4" data-step="4">
+            <span class="step-num">4</span>
+            <span class="step-label">Stack Sim</span>
+          </button>
+          <button class="step-pill" id="pill-5" data-step="5">
+            <span class="step-num">5</span>
+            <span class="step-label">Parse Tree</span>
+          </button>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ===== MAIN CONTENT: one step panel at a time ===== -->
     <section class="main-workspace">
 
-      <!-- ── STEP 1: Left Recursion Check ── -->
+      <!-- ── STEP 1 ── -->
       <div class="step-panel" id="step-panel-1">
         <div class="step-header">
           <div class="step-badge">Step 1</div>
@@ -76,8 +93,8 @@
         </div>
       </div>
 
-      <!-- ── STEP 2: FIRST & FOLLOW Sets ── -->
-      <div class="step-panel" id="step-panel-2">
+      <!-- ── STEP 2 ── -->
+      <div class="step-panel" id="step-panel-2" style="display:none;">
         <div class="step-header">
           <div class="step-badge">Step 2</div>
           <span class="step-title"><i class="fa-solid fa-list-check"></i> FIRST & FOLLOW Sets Computation</span>
@@ -100,12 +117,12 @@
         </div>
       </div>
 
-      <!-- ── STEP 3: Parsing Table ── -->
-      <div class="step-panel" id="step-panel-3">
+      <!-- ── STEP 3 ── -->
+      <div class="step-panel" id="step-panel-3" style="display:none;">
         <div class="step-header">
           <div class="step-badge">Step 3</div>
-          <span class="step-title"><i class="fa-solid fa-table-cells"></i> Construct LL(1) Parsing Table M[A, a]</span>
-          <span id="table-ll1-status" class="preset-tag" style="margin-left: auto;">Pending</span>
+          <span class="step-title"><i class="fa-solid fa-table-cells"></i> LL(1) Parsing Table M[A, a]</span>
+          <span id="table-ll1-status" class="preset-tag" style="margin-left:auto;">Pending</span>
         </div>
         <div class="table-scroll-container">
           <table class="parsing-table" id="parsing-table-view">
@@ -115,14 +132,12 @@
         </div>
       </div>
 
-      <!-- ── STEP 4: Stack Implementation ── -->
-      <div class="step-panel" id="step-panel-4">
+      <!-- ── STEP 4 ── -->
+      <div class="step-panel" id="step-panel-4" style="display:none;">
         <div class="step-header">
           <div class="step-badge">Step 4</div>
-          <span class="step-title"><i class="fa-solid fa-layer-group"></i> Stack Implementation (Predictive Parsing Simulation)</span>
+          <span class="step-title"><i class="fa-solid fa-layer-group"></i> Stack Simulation</span>
         </div>
-
-        <!-- String Input -->
         <div style="display:flex; gap:12px; align-items:flex-end;">
           <div class="form-group" style="flex:1;">
             <label for="string-input">Input String to Parse</label>
@@ -132,15 +147,13 @@
             <i class="fa-solid fa-square-plus"></i> Initialize
           </button>
         </div>
-
-        <!-- Simulation Controls (hidden until initialized) -->
         <div id="simulator-workspace" style="display:none; flex-direction:column; gap:16px;">
           <div class="control-bar">
             <div class="btn-group">
               <button id="btn-sim-reset" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i> Reset</button>
-              <button id="btn-sim-prev" class="btn btn-secondary"><i class="fa-solid fa-backward-step"></i> Step Back</button>
-              <button id="btn-sim-play" class="btn btn-primary"><i class="fa-solid fa-play"></i> Play</button>
-              <button id="btn-sim-next" class="btn btn-primary"><i class="fa-solid fa-forward-step"></i> Step Next</button>
+              <button id="btn-sim-prev"  class="btn btn-secondary"><i class="fa-solid fa-backward-step"></i> Back</button>
+              <button id="btn-sim-play"  class="btn btn-primary"><i class="fa-solid fa-play"></i> Play</button>
+              <button id="btn-sim-next"  class="btn btn-primary"><i class="fa-solid fa-forward-step"></i> Next</button>
             </div>
             <div class="simulation-speed">
               <label for="sim-speed"><i class="fa-solid fa-gauge-high"></i> Speed</label>
@@ -148,57 +161,49 @@
             </div>
             <div id="sim-status-alert" class="status-alert parsing">PARSING: Step 0</div>
           </div>
-
-          <!-- Stack Trace Table -->
           <div class="stack-input-table-container">
             <table class="stack-input-table" id="stack-trace-view">
               <thead>
                 <tr>
                   <th style="width:50px;">Step</th>
-                  <th>Stack Contents</th>
+                  <th>Stack</th>
                   <th>Remaining Input</th>
-                  <th>Applied Action / Production</th>
+                  <th>Action / Production</th>
                 </tr>
               </thead>
               <tbody></tbody>
             </table>
           </div>
-
-          <!-- Execution detail message -->
           <div class="exec-detail-box">
-            <strong style="color:var(--accent-cyan);">Execution Details:</strong>
+            <strong>Execution Details:</strong>
             <p id="sim-details-box">Initialize the simulator and step forward to see transitions.</p>
           </div>
         </div>
       </div>
 
-      <!-- ── STEP 5: Parse Tree Generation ── -->
-      <div class="step-panel" id="step-panel-5">
+      <!-- ── STEP 5 ── -->
+      <div class="step-panel" id="step-panel-5" style="display:none;">
         <div class="step-header">
           <div class="step-badge">Step 5</div>
-          <span class="step-title"><i class="fa-solid fa-sitemap"></i> Parse Tree Generation</span>
-          <span style="margin-left:auto; font-size:0.75rem; color:var(--text-muted);">Scroll to Zoom | Drag to Pan</span>
+          <span class="step-title"><i class="fa-solid fa-sitemap"></i> Parse Tree</span>
+          <span style="margin-left:auto; font-size:0.75rem; color:var(--text-muted);">Scroll to Zoom · Drag to Pan</span>
         </div>
-
-        <!-- Message shown before tree is generated -->
-        <div id="tree-placeholder" class="diag-item info" style="justify-content:center; padding:20px; text-align:center; flex-direction:column; gap:12px;">
-          <i class="fa-solid fa-sitemap" style="font-size:2rem; color:var(--accent-cyan);"></i>
-          <span>Complete <strong>Step 4</strong> stack simulation first, then click the button below to generate the parse tree.</span>
-          <button id="btn-generate-tree" class="btn btn-primary" disabled style="margin:0 auto; padding:10px 28px; font-size:0.95rem;">
+        <div id="tree-placeholder" class="diag-item info" style="justify-content:center; padding:28px; text-align:center; flex-direction:column; gap:14px;">
+          <i class="fa-solid fa-sitemap" style="font-size:2.2rem; color:var(--accent-primary);"></i>
+          <span>Complete <strong>Step 4</strong> first, then generate the parse tree.</span>
+          <button id="btn-generate-tree" class="btn btn-primary" disabled style="margin:0 auto; padding:10px 28px;">
             <i class="fa-solid fa-diagram-project"></i> Generate Parse Tree
           </button>
         </div>
-
-        <!-- Tree canvas (hidden until generated) -->
         <div id="tree-canvas-area" style="display:none; flex-direction:column; gap:12px;">
-          <div style="display:flex; align-items:center; justify-content:space-between;">
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
             <button id="btn-generate-tree-again" class="btn btn-secondary">
-              <i class="fa-solid fa-rotate"></i> Regenerate Tree
+              <i class="fa-solid fa-rotate"></i> Regenerate
             </button>
-            <span style="font-size:0.8rem; color:var(--text-muted);">
-              <i class="fa-solid fa-circle" style="color:#3B82F6;"></i> Non-Terminal &nbsp;
-              <i class="fa-solid fa-circle" style="color:#10B981;"></i> Terminal (Matched) &nbsp;
-              <i class="fa-solid fa-circle" style="color:#F59E0B;"></i> Active Node &nbsp;
+            <span style="font-size:0.78rem; color:var(--text-muted);">
+              <i class="fa-solid fa-circle" style="color:var(--accent-primary);"></i> Non-Terminal &nbsp;
+              <i class="fa-solid fa-circle" style="color:#059669;"></i> Terminal &nbsp;
+              <i class="fa-solid fa-circle" style="color:#F59E0B;"></i> Active &nbsp;
               <i class="fa-solid fa-circle" style="color:#EF4444;"></i> Error
             </span>
           </div>
@@ -212,7 +217,6 @@
           </div>
         </div>
       </div>
-
 
     </section>
   </main>

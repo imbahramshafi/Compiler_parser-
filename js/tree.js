@@ -251,7 +251,7 @@ class ParseTreeVisualizer {
     line.setAttribute("y1", y1);
     line.setAttribute("x2", x2);
     line.setAttribute("y2", y2);
-    line.setAttribute("stroke", "#4B5563"); // Slate 600
+    line.setAttribute("stroke", "#CBD5E1"); // Slate 300 — light theme
     line.setAttribute("stroke-width", "2");
     this.g.appendChild(line);
   }
@@ -272,16 +272,16 @@ class ParseTreeVisualizer {
     let strokeWidth = "2";
     let filter = "";
 
-    // Node Type styling
+    // Node Type styling — light theme colours
     if (type === 'terminal') {
-      fill = "#064E3B"; // Dark green
-      stroke = "#10B981"; // Emerald
+      fill = "#D1FAE5"; // Emerald 100
+      stroke = "#059669"; // Emerald 600
     } else if (type === 'epsilon') {
-      fill = "#1C1400"; // Near black amber
-      stroke = "#78450A"; // Muted copper
+      fill = "#F1F5F9"; // Slate 100
+      stroke = "#94A3B8"; // Slate 400
     } else { // nonterminal
-      fill = "#1A1000"; // Deep amber-black
-      stroke = "#D97706"; // Copper/amber
+      fill = "#CCFBF1"; // Teal 100
+      stroke = "#0D9488"; // Teal 600
     }
 
     // Node Status overlays
@@ -311,7 +311,7 @@ class ParseTreeVisualizer {
     // Align text vertically center
     text.setAttribute("y", y + 5); 
     text.setAttribute("text-anchor", "middle");
-    text.setAttribute("fill", "#F9FAFB");
+    text.setAttribute("fill", "#0F172A");
     text.setAttribute("font-family", "'Outfit', 'Inter', sans-serif");
     text.setAttribute("font-weight", "600");
     text.setAttribute("font-size", symbol.length > 3 ? "10px" : "12px");
