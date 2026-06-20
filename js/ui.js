@@ -147,15 +147,9 @@ F  -> ( E ) | id`;
     if (mainWs) mainWs.scrollTop = 0;
   }
 
-  // Make step pills clickable for navigation
+  // All pills are always clickable
   pills.forEach((pill, i) => {
-    pill.addEventListener("click", () => {
-      const stepNum = i + 1;
-      // Only allow navigating to steps that have been reached (done or active)
-      if (pill.classList.contains("done") || pill.classList.contains("active")) {
-        activateStep(stepNum);
-      }
-    });
+    pill.addEventListener("click", () => activateStep(i + 1));
   });
 
   // ══════════════════════════════════════
@@ -224,8 +218,12 @@ F  -> ( E ) | id`;
     activateStep(3);
     renderParsingTable();
 
-    // ── STEP 4: Ready for simulation ──
+    // ── Mark steps 1-3 done, land on step 1, enable step 4 ──
     enableSimulator();
+    // Show step 1 results but mark 2 & 3 as done so all pills are navigable
+    activateStep(1);
+    pills[1].classList.replace("active", "done");
+    pills[2].classList.replace("active", "done");
   }
 
   // ══════════════════════════════════════
