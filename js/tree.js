@@ -277,11 +277,11 @@ class ParseTreeVisualizer {
       fill = "#064E3B"; // Dark green
       stroke = "#10B981"; // Emerald green
     } else if (type === 'epsilon') {
-      fill = "#374151"; // Dark grey
-      stroke = "#6B7280"; // Medium grey
+      fill = "#2D2040"; // Dark purple-grey
+      stroke = "#7C3AED"; // Muted violet
     } else { // nonterminal
-      fill = "#1E3A8A"; // Dark blue
-      stroke = "#3B82F6"; // Neon blue
+      fill = "#2E1065"; // Deep violet
+      stroke = "#8B5CF6"; // Violet 500
     }
 
     // Node Status overlays
