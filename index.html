@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LL(1) Compiler Parser Visualizer</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header>
+    <div class="header-title-container">
+      <span class="header-badge">Option A: Parsing Phase</span>
+      <h1>LL(1) Compiler Parser Visualizer</h1>
+    </div>
+    <!-- 5-Step Progress Bar -->
+    <div class="steps-bar">
+      <div class="step-pill active" id="pill-1"><span class="step-num">1</span> Left Recursion</div>
+      <div class="step-arrow">›</div>
+      <div class="step-pill" id="pill-2"><span class="step-num">2</span> FIRST & FOLLOW</div>
+      <div class="step-arrow">›</div>
+      <div class="step-pill" id="pill-3"><span class="step-num">3</span> Parse Table</div>
+      <div class="step-arrow">›</div>
+      <div class="step-pill" id="pill-4"><span class="step-num">4</span> Stack</div>
+      <div class="step-arrow">›</div>
+      <div class="step-pill" id="pill-5"><span class="step-num">5</span> Parse Tree</div>
+    </div>
+  </header>
+
+  <!-- Workspace Grid -->
+  <main class="workspace">
+
+    <!-- ===== LEFT SIDEBAR: Grammar Input ===== -->
+    <section class="panel sidebar-panel">
+      <div class="panel-title">
+        <span><i class="fa-solid fa-gears"></i> Grammar Config</span>
+      </div>
+
+      <!-- CFG Rules Editor -->
+      <div class="form-group">
+        <label for="grammar-input">Context-Free Grammar (CFG) Rules</label>
+        <textarea id="grammar-input" spellcheck="false" placeholder="E -> T E'&#10;E' -> + T E' | e&#10;T -> F T'&#10;T' -> * F T' | e&#10;F -> ( E ) | id"></textarea>
+      </div>
+
+      <!-- Buttons -->
+      <div class="btn-group">
+        <button id="btn-parse-grammar" class="btn btn-primary">
+          <i class="fa-solid fa-play"></i> Run All Steps
+        </button>
+        <div class="file-upload-wrapper">
+          <button class="btn btn-secondary"><i class="fa-solid fa-file-import"></i> Load File</button>
+          <input type="file" id="file-grammar-upload" accept=".txt">
+        </div>
+        <button id="btn-grammar-download" class="btn btn-secondary">
+          <i class="fa-solid fa-file-arrow-down"></i> Save
+        </button>
+      </div>
+    </section>
+
+    <!-- ===== RIGHT: 5-Step Panels ===== -->
+    <section class="main-workspace">
+
+      <!-- ── STEP 1: Left Recursion Check ── -->
+      <div class="step-panel" id="step-panel-1">
+        <div class="step-header">
+          <div class="step-badge">Step 1</div>
+          <span class="step-title"><i class="fa-solid fa-triangle-exclamation"></i> Left Recursion & Grammar Validation</span>
+        </div>
+        <div id="diagnostics-log" class="diagnostics-container">
+          <div class="diag-item info">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>Enter a CFG in the left panel and click <strong>Run All Steps</strong> to start analysis.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STEP 2: FIRST & FOLLOW Sets ── -->
+      <div class="step-panel" id="step-panel-2">
+        <div class="step-header">
+          <div class="step-badge">Step 2</div>
+          <span class="step-title"><i class="fa-solid fa-list-check"></i> FIRST & FOLLOW Sets Computation</span>
+        </div>
+        <div class="sets-grid">
+          <div>
+            <h3 class="sets-subtitle">FIRST SETS</h3>
+            <table class="sets-table" id="first-sets-table">
+              <thead><tr><th>Non-Terminal</th><th>FIRST Set</th></tr></thead>
+              <tbody><tr><td colspan="2" class="table-empty">Run analysis to compute FIRST sets.</td></tr></tbody>
+            </table>
+          </div>
+          <div>
+            <h3 class="sets-subtitle">FOLLOW SETS</h3>
+            <table class="sets-table" id="follow-sets-table">
+              <thead><tr><th>Non-Terminal</th><th>FOLLOW Set</th></tr></thead>
+              <tbody><tr><td colspan="2" class="table-empty">Run analysis to compute FOLLOW sets.</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: Parsing Table ── -->
+      <div class="step-panel" id="step-panel-3">
+        <div class="step-header">
+          <div class="step-badge">Step 3</div>
+          <span class="step-title"><i class="fa-solid fa-table-cells"></i> Construct LL(1) Parsing Table M[A, a]</span>
+          <span id="table-ll1-status" class="preset-tag" style="margin-left: auto;">Pending</span>
+        </div>
+        <div class="table-scroll-container">
+          <table class="parsing-table" id="parsing-table-view">
+            <thead><tr><th>M[A, a]</th><th>$</th></tr></thead>
+            <tbody><tr><td colspan="2" class="table-empty">Run analysis to generate the parsing table.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── STEP 4: Stack Implementation ── -->
+      <div class="step-panel" id="step-panel-4">
+        <div class="step-header">
+          <div class="step-badge">Step 4</div>
+          <span class="step-title"><i class="fa-solid fa-layer-group"></i> Stack Implementation (Predictive Parsing Simulation)</span>
+        </div>
+
+        <!-- String Input -->
+        <div style="display:flex; gap:12px; align-items:flex-end;">
+          <div class="form-group" style="flex:1;">
+            <label for="string-input">Input String to Parse</label>
+            <input type="text" id="string-input" placeholder="e.g. id + id * id" value="id + id * id">
+          </div>
+          <button id="btn-init-sim" class="btn btn-primary" style="height:42px;">
+            <i class="fa-solid fa-square-plus"></i> Initialize
+          </button>
+        </div>
+
+        <!-- Simulation Controls (hidden until initialized) -->
+        <div id="simulator-workspace" style="display:none; flex-direction:column; gap:16px;">
+          <div class="control-bar">
+            <div class="btn-group">
+              <button id="btn-sim-reset" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+              <button id="btn-sim-prev" class="btn btn-secondary"><i class="fa-solid fa-backward-step"></i> Step Back</button>
+              <button id="btn-sim-play" class="btn btn-primary"><i class="fa-solid fa-play"></i> Play</button>
+              <button id="btn-sim-next" class="btn btn-primary"><i class="fa-solid fa-forward-step"></i> Step Next</button>
+            </div>
+            <div class="simulation-speed">
+              <label for="sim-speed"><i class="fa-solid fa-gauge-high"></i> Speed</label>
+              <input type="range" id="sim-speed" min="200" max="2000" step="100" value="800" style="width:100px;">
+            </div>
+            <div id="sim-status-alert" class="status-alert parsing">PARSING: Step 0</div>
+          </div>
+
+          <!-- Stack Trace Table -->
+          <div class="stack-input-table-container">
+            <table class="stack-input-table" id="stack-trace-view">
+              <thead>
+                <tr>
+                  <th style="width:50px;">Step</th>
+                  <th>Stack Contents</th>
+                  <th>Remaining Input</th>
+                  <th>Applied Action / Production</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <!-- Execution detail message -->
+          <div class="exec-detail-box">
+            <strong style="color:var(--accent-cyan);">Execution Details:</strong>
+            <p id="sim-details-box">Initialize the simulator and step forward to see transitions.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STEP 5: Parse Tree Generation ── -->
+      <div class="step-panel" id="step-panel-5">
+        <div class="step-header">
+          <div class="step-badge">Step 5</div>
+          <span class="step-title"><i class="fa-solid fa-sitemap"></i> Parse Tree Generation</span>
+          <span style="margin-left:auto; font-size:0.75rem; color:var(--text-muted);">Scroll to Zoom | Drag to Pan</span>
+        </div>
+
+        <!-- Message shown before tree is generated -->
+        <div id="tree-placeholder" class="diag-item info" style="justify-content:center; padding:20px; text-align:center; flex-direction:column; gap:12px;">
+          <i class="fa-solid fa-sitemap" style="font-size:2rem; color:var(--accent-cyan);"></i>
+          <span>Complete <strong>Step 4</strong> stack simulation first, then click the button below to generate the parse tree.</span>
+          <button id="btn-generate-tree" class="btn btn-primary" disabled style="margin:0 auto; padding:10px 28px; font-size:0.95rem;">
+            <i class="fa-solid fa-diagram-project"></i> Generate Parse Tree
+          </button>
+        </div>
+
+        <!-- Tree canvas (hidden until generated) -->
+        <div id="tree-canvas-area" style="display:none; flex-direction:column; gap:12px;">
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <button id="btn-generate-tree-again" class="btn btn-secondary">
+              <i class="fa-solid fa-rotate"></i> Regenerate Tree
+            </button>
+            <span style="font-size:0.8rem; color:var(--text-muted);">
+              <i class="fa-solid fa-circle" style="color:#3B82F6;"></i> Non-Terminal &nbsp;
+              <i class="fa-solid fa-circle" style="color:#10B981;"></i> Terminal (Matched) &nbsp;
+              <i class="fa-solid fa-circle" style="color:#F59E0B;"></i> Active Node &nbsp;
+              <i class="fa-solid fa-circle" style="color:#EF4444;"></i> Error
+            </span>
+          </div>
+          <div class="tree-container-wrapper" id="svg-tree-wrapper">
+            <svg id="tree-svg-container"></svg>
+            <div class="tree-controls">
+              <button id="btn-tree-zoom-in"  class="btn btn-secondary btn-icon-only" title="Zoom In"><i class="fa-solid fa-plus"></i></button>
+              <button id="btn-tree-zoom-out" class="btn btn-secondary btn-icon-only" title="Zoom Out"><i class="fa-solid fa-minus"></i></button>
+              <button id="btn-tree-reset"    class="btn btn-secondary btn-icon-only" title="Center"><i class="fa-solid fa-compress"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </section>
+  </main>
+
+  <script src="js/parser.js"></script>
+  <script src="js/tree.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>
